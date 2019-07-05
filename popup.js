@@ -16,6 +16,18 @@ $.ajax({
                     'url': mapList[mapList.length - 1].url
                 });
             });
+            let playButton = item.find(".title_play");
+            playButton.bind("click", function () {
+                // TODO 把整个列表的播放按钮都变回播放
+                // TODO 把当前按钮至为暂停
+                // TODO 播放音乐
+                if (playButton.attr("src") === "play.png") {
+                    playButton.attr("src", "pause.png");
+                } else {
+                    playButton.attr("src", "play.png");
+                }
+                return false;
+            });
         }
     }
 });
@@ -31,8 +43,11 @@ function buildItem(beatmap) {
         '            </span>' +
         '        </div>' +
         '        <div class="title">' +
-        '            <h4>' + beatmap.title + '</h4>' +
-        '            <h5>' + beatmap.artist + '</h5>' +
+        '            <div class="title_info">' +
+        '                <h4>' + beatmap.title + '</h4>' +
+        '                <h5>' + beatmap.artist + '</h5>' +
+        '            </div>' +
+        '            <img class="title_play" src="play.png" alt="">' +
         '        </div>' +
         '    </div>' +
         '    <div class="panel_down">' +
