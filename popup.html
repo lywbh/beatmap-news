@@ -15,6 +15,10 @@
             margin:0;
         }
 
+        .hidden {
+            display: none;
+        }
+
         .panel {
             margin: 10px;
             width: 280px;
@@ -42,11 +46,11 @@
             height: 32px;
         }
 
-        .panel>.panel_up>.status>.rankStatus {
+        .panel>.panel_up>.status>.rank_status {
             float: left;
         }
 
-        .panel>.panel_up>.status>.playStatus {
+        .panel>.panel_up>.status>.play_status {
             float: right;
             text-align: right;
             font-size: 12px;
@@ -94,6 +98,7 @@
 </head>
 <body>
 <ul id="beatmapList"></ul>
+<audio id="previewAudio"></audio>
 <script src="jquery-3.1.1.min.js"></script>
 <script src="popup.js"></script>
 </body>
