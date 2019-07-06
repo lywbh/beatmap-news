@@ -5,7 +5,7 @@
   "permissions": [
     "cookies",
     "tabs",
-    "*://osu.ppy.sh/*"
+    "*://*.ppy.sh/*"
   ],
   "browser_action": {
     "default_title": "beatmap preview",
