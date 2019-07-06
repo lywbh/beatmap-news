@@ -1,29 +1,41 @@
 const baseUrl = 'https://osu.ppy.sh/beatmapsets/search';
-let cursor;
+let cursorStore;
+let queryStore;
 
-$.ajax({
-    url: baseUrl,
-    type: 'get',
-    success: function (res) {
-        appendList(res);
-        cursor = res.cursor;
-        $("#listMore").show();
-    }
+initData();
+
+$("#searchButton").bind("click", function () {
+    $("#beatmapList").empty();
+    let q = $("#searchData").val();
+    initData(undefined, q);
+    queryStore = q;
 });
 
 $("#listMore").bind("click", function () {
     $(this).hide();
-    let param = cursor ? '?cursor%5Bapproved_date%5D=' + cursor.approved_date + '&cursor%5B_id%5D=' + cursor._id : '';
+    initData(cursorStore, queryStore);
+});
+
+function initData(cursor, q) {
+    let param = '';
+    if (q) {
+        param += '&q=' + q;
+    }
+    if (cursor) {
+        for (let key in cursor) {
+           param += '&cursor%5B' + key +  '%5D=' + cursor[key];
+        }
+    }
     $.ajax({
-        url: baseUrl + param,
+        url: baseUrl + "?" + param.substring(1),
         type: 'get',
         success: function (res) {
             appendList(res);
-            cursor = res.cursor;
+            cursorStore = res.cursor;
             $("#listMore").show();
         }
     });
-});
+}
 
 function appendList(res) {
     let itemUl = $("#beatmapList");
@@ -44,9 +56,8 @@ function appendList(res) {
 }
 
 function bindPlay() {
-    let itemUl = $("#beatmapList");
     let audio = $("#previewAudio");
-    let playButton = itemUl.find(".title_play");
+    let playButton = $("#beatmapList").find(".title_play");
     playButton.unbind("click").bind("click", function () {
         try {
             audio[0].pause();
