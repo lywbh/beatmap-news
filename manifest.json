@@ -1,17 +1,20 @@
 {
-    "name": "osu! beatmaps",
-    "version": "0.0.1",
-    "description": "osu! beatmap previewer",
-    "permissions": ["tabs", "https://osu.ppy.sh/*"],
-    "browser_action": {
-        "default_title": "beatmap preview",
-        "default_popup": "popup.html",
-        "default_icon": {
-            "128": "icon.png"
-        }
-    },
-    "icons": {
-        "128": "icon.png"
-    },
-    "manifest_version": 2
+  "name": "osu! beatmaps",
+  "version": "0.0.1",
+  "description": "osu! beatmap previewer",
+  "permissions": [
+    "tabs",
+    "https://osu.ppy.sh/*"
+  ],
+  "browser_action": {
+    "default_title": "beatmap preview",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "128": "icon.png"
+    }
+  },
+  "icons": {
+    "128": "icon.png"
+  },
+  "manifest_version": 2
 }

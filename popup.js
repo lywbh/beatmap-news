@@ -1,13 +1,31 @@
+const baseUrl = 'https://osu.ppy.sh/beatmapsets/search';
+let cursor;
+
 $.ajax({
-    url: 'https://osu.ppy.sh/beatmapsets/search',
+    url: baseUrl,
     type: 'get',
     success: function (res) {
-        createList(res);
-        bindPlay();
+        appendList(res);
+        cursor = res.cursor;
+        $("#listMore").show();
     }
 });
 
-function createList(res) {
+$("#listMore").bind("click", function () {
+    $(this).hide();
+    let param = cursor ? '?cursor%5Bapproved_date%5D=' + cursor.approved_date + '&cursor%5B_id%5D=' + cursor._id : '';
+    $.ajax({
+        url: baseUrl + param,
+        type: 'get',
+        success: function (res) {
+            appendList(res);
+            cursor = res.cursor;
+            $("#listMore").show();
+        }
+    });
+});
+
+function appendList(res) {
     let itemUl = $("#beatmapList");
     for (let i in res.beatmapsets) {
         let item = $("<li></li>");
@@ -22,13 +40,14 @@ function createList(res) {
             });
         });
     }
+    bindPlay();
 }
 
 function bindPlay() {
     let itemUl = $("#beatmapList");
     let audio = $("#previewAudio");
     let playButton = itemUl.find(".title_play");
-    playButton.bind("click", function () {
+    playButton.unbind("click").bind("click", function () {
         try {
             audio[0].pause();
             if ($(this).attr("src") === "play.png") {

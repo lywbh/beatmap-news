@@ -12,7 +12,7 @@
 
         h1, h2, h3, h4, h5, h6 {
             padding: 0;
-            margin:0;
+            margin: 0;
         }
 
         .hidden {
@@ -26,13 +26,14 @@
             box-shadow: 0 0 4px #BBBBBB;
             font-size: 14px;
             cursor: pointer;
+            overflow: hidden;
         }
 
         .panel:hover {
             box-shadow: 0 0 8px #7aabcc;
         }
 
-        .panel>.panel_up {
+        .panel > .panel_up {
             padding: 8px;
             width: 264px;
             height: 64px;
@@ -41,34 +42,34 @@
             text-shadow: 5px 2px 6px #000;
         }
 
-        .panel>.panel_up>.status {
+        .panel > .panel_up > .status {
             width: 264px;
             height: 32px;
         }
 
-        .panel>.panel_up>.status>.rank_status {
+        .panel > .panel_up > .status > .rank_status {
             float: left;
         }
 
-        .panel>.panel_up>.status>.play_status {
+        .panel > .panel_up > .status > .play_status {
             float: right;
             text-align: right;
             font-size: 12px;
             font-weight: bold;
         }
 
-        .panel>.panel_up>.title {
+        .panel > .panel_up > .title {
             width: 264px;
             height: 32px;
         }
 
-        .panel>.panel_up>.title>.title_info {
+        .panel > .panel_up > .title > .title_info {
             float: left;
             width: 232px;
             height: 32px;
         }
 
-        .panel>.panel_up>.title>.title_play {
+        .panel > .panel_up > .title > .title_play {
             float: right;
             padding: 5px;
             width: 22px;
@@ -76,11 +77,11 @@
             border-radius: 22px;
         }
 
-        .panel>.panel_up>.title>.title_play:hover {
+        .panel > .panel_up > .title > .title_play:hover {
             box-shadow: 0 0 5px black;
         }
 
-        .panel>.panel_down {
+        .panel > .panel_down {
             padding-left: 4px;
             padding-right: 4px;
             width: 264px;
@@ -88,16 +89,30 @@
             font-size: 12px;
             line-height: 20px;
         }
-        .panel>.panel_down>.mapper {
+
+        .panel > .panel_down > .mapper {
             float: left;
         }
-        .panel>.panel_down>.source {
+
+        .panel > .panel_down > .source {
             float: right;
+        }
+
+        #listMore {
+            width: 280px;
+            text-align: center;
+            cursor: pointer;
+            display: none;
+        }
+
+        #listMore:hover {
+            color: #7aabcc;
         }
     </style>
 </head>
 <body>
 <ul id="beatmapList"></ul>
+<div id="listMore">more...</div>
 <audio id="previewAudio"></audio>
 <script src="jquery-3.1.1.min.js"></script>
 <script src="popup.js"></script>
