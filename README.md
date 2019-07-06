@@ -1,5 +1,5 @@
 # OSU! 谱面预览插件
 
-##### 结果预览播放还没做（
+##### 连搜索都要登录，没法玩了:(，得研究下cookie怎么存取
 
-![sample](https://puu.sh/DP03d/c734f48957.png)
+![sample](https://puu.sh/DPkbW/76f416bb87.png)
