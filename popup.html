@@ -19,6 +19,30 @@
             display: none;
         }
 
+        .search_bar {
+            width: 280px;
+            padding: 8px;
+            text-align: center;
+        }
+
+        .search_bar input {
+            width: 220px;
+            border: 1px solid #7aabcc;
+        }
+
+        .search_bar button {
+            width: 55px;
+            border-width: 0;
+            background: #5599FF;
+            cursor: pointer;
+            outline: none;
+            color: white;
+        }
+
+        .search_bar button:hover {
+            box-shadow: 0 0 4px #BBBBBB;
+        }
+
         .panel {
             margin: 10px;
             width: 280px;
@@ -111,6 +135,12 @@
     </style>
 </head>
 <body>
+<div class="search_bar">
+    <label for="search">
+        <input id="search" type="search" placeholder="请输入要检索的谱面">
+        <button>search</button>
+    </label>
+</div>
 <ul id="beatmapList"></ul>
 <div id="listMore">more...</div>
 <audio id="previewAudio"></audio>

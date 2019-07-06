@@ -3,8 +3,9 @@
   "version": "0.0.1",
   "description": "osu! beatmap previewer",
   "permissions": [
+    "cookies",
     "tabs",
-    "https://osu.ppy.sh/*"
+    "*://osu.ppy.sh/*"
   ],
   "browser_action": {
     "default_title": "beatmap preview",
