@@ -2,21 +2,27 @@ const baseUrl = 'https://osu.ppy.sh/beatmapsets/search';
 let cursorStore;
 let queryStore;
 
+const searchData = $("#searchData");
+const searchButton = $("#searchButton");
+const mapList = $("#beatmapList");
+const audio = $("#previewAudio");
+const moreButton = $("#listMore");
+
 initData();
 
-$("#searchButton").bind("click", function () {
+searchButton.bind("click", function () {
     $("#beatmapList").empty();
-    let q = $("#searchData").val();
-    initData(undefined, q);
+    let q = searchData.val();
+    initData(undefined, q, true);
     queryStore = q;
 });
 
-$("#listMore").bind("click", function () {
+moreButton.bind("click", function () {
     $(this).hide();
     initData(cursorStore, queryStore);
 });
 
-function initData(cursor, q) {
+function initData(cursor, q, isSearch) {
     let param = '';
     if (q) {
         param += '&q=' + q;
@@ -30,19 +36,30 @@ function initData(cursor, q) {
         url: baseUrl + "?" + param.substring(1),
         type: 'get',
         success: function (res) {
+            if (isSearch && res.cursor && !res.cursor._score) {
+                searchData.val("");
+                searchData.attr("placeholder", "请先前往官网登录");
+                searchButton.addClass("warn");
+                setTimeout(function () {
+                    searchData.attr("placeholder", "请输入要检索的谱面");
+                    searchButton.removeClass("warn");
+                }, 2000);
+            }
             appendList(res);
             cursorStore = res.cursor;
-            $("#listMore").show();
+            moreButton.show();
+        },
+        error: function (e) {
+            console.log(e);
         }
     });
 }
 
 function appendList(res) {
-    let itemUl = $("#beatmapList");
     for (let i in res.beatmapsets) {
         let item = $("<li></li>");
         item.append(buildItem(res.beatmapsets[i]));
-        itemUl.append(item);
+        mapList.append(item);
         let backgroundUrl = res.beatmapsets[i].covers.card;
         item.find(".panel_up").css("background-image", "url(" + backgroundUrl + ")");
         item.bind("click", function () {
@@ -56,8 +73,7 @@ function appendList(res) {
 }
 
 function bindPlay() {
-    let audio = $("#previewAudio");
-    let playButton = $("#beatmapList").find(".title_play");
+    let playButton = mapList.find(".title_play");
     playButton.unbind("click").bind("click", function () {
         try {
             audio[0].pause();
