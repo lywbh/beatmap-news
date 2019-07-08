@@ -2,13 +2,13 @@ const baseUrl = 'https://osu.ppy.sh/beatmapsets';
 let cursorStore;
 let queryStore;
 
+initData();
+
 const searchData = $("#searchData");
 const searchButton = $("#searchButton");
 const mapList = $("#beatmapList");
 const audio = $("#previewAudio");
 const moreButton = $("#listMore");
-
-initData();
 
 searchButton.bind("click", function () {
     $("#beatmapList").empty();
@@ -112,7 +112,7 @@ function buildItem(mapInfo) {
         '                        <h4>' + mapInfo.title + '</h4>' +
         '                        <h5>' + mapInfo.artist + '</h5>' +
         '                    </div>' +
-        '                    <img class="title_play" src="play.png" alt="" preview="http:' + mapInfo.preview_url + '">' +
+        '                    <img class="title_play" src="../img/play.png" alt="" preview="http:' + mapInfo.preview_url + '">' +
         '                </div>' +
         '            </div>' +
         '            <div class="panel_down">' +
