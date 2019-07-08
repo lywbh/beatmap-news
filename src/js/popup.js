@@ -80,13 +80,13 @@ function bindPlay() {
     playButton.unbind("click").bind("click", function () {
         try {
             audio[0].pause();
-            if ($(this).attr("src") === "play.png") {
+            if ($(this).attr("src") === "img/play.png") {
                 audio.attr("src", $(this).attr("preview"));
                 audio[0].play();
-                playButton.attr("src", "play.png");
-                $(this).attr("src", "pause.png");
-            } else if ($(this).attr("src") === "pause.png") {
-                $(this).attr("src", "play.png");
+                playButton.attr("src", "img/play.png");
+                $(this).attr("src", "img/pause.png");
+            } else if ($(this).attr("src") === "img/pause.png") {
+                $(this).attr("src", "img/play.png");
             }
             return false;
         } catch (e) {
@@ -112,7 +112,7 @@ function buildItem(mapInfo) {
         '                        <h4>' + mapInfo.title + '</h4>' +
         '                        <h5>' + mapInfo.artist + '</h5>' +
         '                    </div>' +
-        '                    <img class="title_play" src="../img/play.png" alt="" preview="http:' + mapInfo.preview_url + '">' +
+        '                    <img class="title_play" src="img/play.png" alt="" preview="http:' + mapInfo.preview_url + '">' +
         '                </div>' +
         '            </div>' +
         '            <div class="panel_down">' +
