@@ -2,27 +2,28 @@ const baseUrl = 'https://osu.ppy.sh/beatmapsets';
 let cursorStore;
 let queryStore;
 
-initData();
-
 const searchData = $("#searchData");
 const searchButton = $("#searchButton");
 const mapList = $("#beatmapList");
 const audio = $("#previewAudio");
-const moreButton = $("#listMore");
+const moreButton = $("#listMore>.more");
+const loading = $("#listMore>.loading");
+
+initData();
 
 searchButton.bind("click", function () {
-    $("#beatmapList").empty();
-    let q = searchData.val();
-    initData(undefined, q);
-    queryStore = q;
+    mapList.empty();
+    initData(undefined, searchData.val());
+    queryStore = searchData.val();
 });
 
 moreButton.bind("click", function () {
-    $(this).hide();
     initData(cursorStore, queryStore);
 });
 
 function initData(cursor, q) {
+    moreButton.hide();
+    loading.show();
     let param = '';
     if (q) {
         param += '&q=' + q;
@@ -32,10 +33,12 @@ function initData(cursor, q) {
             param += '&cursor%5B' + key + '%5D=' + cursor[key];
         }
     }
+    console.log(baseUrl + "/search?" + param.substring(1));
     $.ajax({
         url: baseUrl + "/search?" + param.substring(1),
         type: 'get',
         success: function (res) {
+            console.log(res);
             if (q && res.cursor && !res.cursor._score) {
                 searchData.val("");
                 searchData.attr("placeholder", "请先前往官网登录");
@@ -46,7 +49,10 @@ function initData(cursor, q) {
                 }, 2000);
             }
             appendList(res);
-            cursorStore = res.cursor;
+            if (res.cursor) {
+                cursorStore = res.cursor;
+            }
+            loading.hide();
             moreButton.show();
         },
         error: function (e) {
@@ -61,9 +67,8 @@ function appendList(res) {
         let item = $("<li></li>");
         item.append(buildItem(mapInfo));
         mapList.append(item);
-        let backgroundUrl = mapInfo.covers.card;
         let imgPanel = item.find(".panel_up");
-        imgPanel.css("background-image", "url(" + backgroundUrl + ")");
+        imgPanel.css("background-image", "url(" + mapInfo.covers.card + ")");
         imgPanel.bind("click", function () {
             let mapList = mapInfo.beatmaps;
             chrome.tabs.create({"url": mapList[mapList.length - 1].url});
@@ -83,23 +88,21 @@ function bindPlay() {
             if ($(this).attr("src") === "img/play.png") {
                 audio.attr("src", $(this).attr("preview"));
                 audio[0].play();
-                playButton.attr("src", "img/play.png");
                 $(this).attr("src", "img/pause.png");
+                playButton.attr("src", "img/play.png");
             } else if ($(this).attr("src") === "img/pause.png") {
                 $(this).attr("src", "img/play.png");
             }
-            return false;
         } catch (e) {
             console.log(e);
-            return false;
         }
+        return false;
     });
 }
 
 function buildItem(mapInfo) {
     return $('<div class="con">' +
         '        <div class="panel">' +
-        '            <div id="preview_url" class="hidden">' + mapInfo.preview_url + '</div>' +
         '            <div class="panel_up">' +
         '                <div class="status">' +
         '                    <span class="rank_status">' + mapInfo.status + '</span>' +
@@ -120,6 +123,6 @@ function buildItem(mapInfo) {
         '                <span class="source">' + mapInfo.source + '</span>' +
         '            </div>' +
         '        </div>' +
-        '        <div class="download">↓</div>' +
+        '        <a class="download">↓</a>' +
         '    </div>');
 }
