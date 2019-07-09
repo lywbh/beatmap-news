@@ -4,7 +4,7 @@
 
 ##### 搜索和下载都需要先在[官网](https://osu.ppy.sh/home)登录
 
-![sample](https://puu.sh/DQbuy/0d53dd56de.png)
-![sample](https://puu.sh/DQbuz/553309261b.png)
+![sample](https://puu.sh/DQzlV/aac0c0a9f2.png)
+![sample](https://puu.sh/DQzlW/ec4d78497d.png)
 
 ###### 考虑列表加个sort by，不然搜索有点难用

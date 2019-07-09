@@ -33,12 +33,10 @@ function initData(cursor, q) {
             param += '&cursor%5B' + key + '%5D=' + cursor[key];
         }
     }
-    console.log(baseUrl + "/search?" + param.substring(1));
     $.ajax({
         url: baseUrl + "/search?" + param.substring(1),
         type: 'get',
         success: function (res) {
-            console.log(res);
             if (q && res.cursor && !res.cursor._score) {
                 searchData.val("");
                 searchData.attr("placeholder", "请先前往官网登录");
@@ -85,13 +83,13 @@ function bindPlay() {
     playButton.unbind("click").bind("click", function () {
         try {
             audio[0].pause();
-            if ($(this).attr("src") === "img/play.png") {
+            if ($(this).text() === "▲") {
                 audio.attr("src", $(this).attr("preview"));
                 audio[0].play();
-                $(this).attr("src", "img/pause.png");
-                playButton.attr("src", "img/play.png");
-            } else if ($(this).attr("src") === "img/pause.png") {
-                $(this).attr("src", "img/play.png");
+                playButton.text("▲");
+                $(this).text("〓");
+            } else if ($(this).text() === "〓") {
+                $(this).text("▲");
             }
         } catch (e) {
             console.log(e);
@@ -105,7 +103,7 @@ function buildItem(mapInfo) {
         '        <div class="panel">' +
         '            <div class="panel_up">' +
         '                <div class="status">' +
-        '                    <span class="rank_status">' + mapInfo.status + '</span>' +
+        '                    <span class="rank_status">' + mapInfo.status.toUpperCase() + '</span>' +
         '                    <span class="play_status">' +
         '                    <span>' + mapInfo.play_count + ' plays</span><br>' +
         '                    <span>' + mapInfo.favourite_count + ' loves</span>' +
@@ -115,7 +113,7 @@ function buildItem(mapInfo) {
         '                        <h4>' + mapInfo.title + '</h4>' +
         '                        <h5>' + mapInfo.artist + '</h5>' +
         '                    </div>' +
-        '                    <img class="title_play" src="img/play.png" alt="" preview="http:' + mapInfo.preview_url + '">' +
+        '                    <a class="title_play" preview="http:' + mapInfo.preview_url + '">▲</a>' +
         '                </div>' +
         '            </div>' +
         '            <div class="panel_down">' +
