@@ -100,7 +100,7 @@ h1, h2, h3, h4, h5, h6 {
     height: 64px;
     color: white;
     font-family: 微软雅黑, serif;
-    text-shadow: 5px 2px 6px #000;
+    text-shadow: 5px 2px 6px black;
     cursor: pointer;
     user-select: none;
 }
@@ -140,7 +140,7 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: bold;
     color: white;
     text-align: center;
-    text-shadow: 2px -5px 6px #000;
+    text-shadow: 2px -5px 6px black;
     transform: rotate(90deg);
 }
 
@@ -162,6 +162,11 @@ h1, h2, h3, h4, h5, h6 {
     max-width: 100px;
     white-space: nowrap;
     overflow: hidden;
+    cursor: pointer;
+}
+
+.panel > .panel_down > .mapper:hover {
+    color: gray;
 }
 
 .panel > .panel_down > .source {

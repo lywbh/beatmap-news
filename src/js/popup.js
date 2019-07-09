@@ -1,4 +1,4 @@
-const baseUrl = 'https://osu.ppy.sh/beatmapsets';
+const baseUrl = 'https://osu.ppy.sh';
 let cursorStore;
 let queryStore;
 
@@ -34,7 +34,7 @@ function initData(cursor, q) {
         }
     }
     $.ajax({
-        url: baseUrl + "/search?" + param.substring(1),
+        url: baseUrl + "/beatmapsets/search?" + param.substring(1),
         type: 'get',
         success: function (res) {
             if (q && res.cursor && !res.cursor._score) {
@@ -72,8 +72,11 @@ function appendList(res) {
             chrome.tabs.create({"url": mapList[mapList.length - 1].url});
         });
         item.find(".download").bind("click", function () {
-            chrome.tabs.create({"url": baseUrl + "/" + mapInfo.id + "/download"});
-        })
+            chrome.tabs.create({"url": baseUrl + "/beatmapsets/" + mapInfo.id + "/download"});
+        });
+        item.find(".mapper").bind("click", function () {
+            chrome.tabs.create({"url": baseUrl + "/users/" + mapInfo.user_id});
+        });
     }
     bindPlay();
 }
