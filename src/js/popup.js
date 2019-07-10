@@ -1,6 +1,7 @@
 const baseUrl = 'https://osu.ppy.sh';
 let cursorStore;
 let queryStore;
+let downloadingSet = new Set();
 
 const searchData = $("#searchData");
 const searchButton = $("#searchButton");
@@ -85,25 +86,52 @@ function appendList(res) {
         item.find(".mapper").bind("click", function () {
             chrome.tabs.create({url: baseUrl + "/users/" + mapInfo.user_id});
         });
-        bindPlay(item.find(".title_play"), mapInfo);
-        bindDownload(item.find(".download"), mapInfo);
+        bindPlay(item, mapInfo);
+        bindDownload(item, mapInfo);
     }
 
-    function bindDownload(button, mapInfo) {
+    function bindDownload(item, mapInfo) {
+        let button = item.find(".download");
+        let progress = item.find(".progress");
         button.one("click", function () {
-            button.css("box-shadow", "inset 0 0 4px red");
-            chrome.downloads.download({
-                url: baseUrl + "/beatmapsets/" + mapInfo.id + "/download",
-                filename: mapInfo.id + " - " + mapInfo.title + ".osz",
-                saveAs: true
-            }, function () {
-                button.css("box-shadow", "");
-                bindDownload(button, mapInfo);
-            });
+            if (downloadingSet.has(mapInfo.id)) {
+                button.addClass("warn");
+                setTimeout(function () {
+                    button.removeClass("warn");
+                    bindDownload(item, mapInfo);
+                }, 1000);
+            } else {
+                chrome.downloads.download({
+                    url: baseUrl + "/beatmapsets/" + mapInfo.id + "/download",
+                    filename: mapInfo.id + " - " + mapInfo.title + ".osz",
+                    saveAs: true
+                }, function (downloadId) {
+                    downloadingSet.add(mapInfo.id);
+                    bindDownload(item, mapInfo);
+                    progressMonitor(downloadId, mapInfo.id);
+                });
+            }
         });
+
+        function progressMonitor(downloadId, mapId) {
+            let progressThread = setInterval(function() {
+                chrome.downloads.search({id: downloadId}, function(dlItem) {
+                    if (dlItem[0].state === "in_progress") {
+                        let cb = dlItem[0].bytesReceived;
+                        let tb = dlItem[0].totalBytes;
+                        progress.css("margin-right", (1 - cb / tb) * 100 + "%");
+                    } else {
+                        clearInterval(progressThread);
+                        progress.css("margin-right", "100%");
+                        downloadingSet.delete(mapId);
+                    }
+                });
+            }, 1000);
+        }
     }
 
-    function bindPlay(button, mapInfo) {
+    function bindPlay(item, mapInfo) {
+        let button = item.find(".title_play");
         button.bind("click", function () {
             try {
                 audio[0].pause();
@@ -141,6 +169,7 @@ function buildItem(mapInfo) {
         '                    <a class="title_play">▲</a>' +
         '                </div>' +
         '            </div>' +
+        '            <div class="progress"></div>' +
         '            <div class="panel_down">' +
         '                <span class="mapper">' + mapInfo.creator + '</span>' +
         '                <span class="source">' + mapInfo.source + '</span>' +

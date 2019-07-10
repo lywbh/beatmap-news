@@ -34,10 +34,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .search_bar button.warn {
-    animation: warnColor 1s;
+    animation: searchWarn 1s;
 }
 
-@keyframes warnColor {
+@keyframes searchWarn {
     from {
         background: red;
     }
@@ -83,16 +83,27 @@ h1, h2, h3, h4, h5, h6 {
     text-align: center;
     font-size: 20px;
     font-weight: bold;
-    color: #7aabcc;
-    box-shadow: 0 0 4px #BBBBBB;
+    color: orange;
+    box-shadow: 0 0 10px orange;
     cursor: pointer;
     user-select: none;
     overflow: hidden;
     transition: width 0.1s;
 }
 
-.download:hover {
-    box-shadow: inset 0 0 4px #7aabcc;
+.download.warn {
+    animation: downloadWarn 1s;
+}
+
+@keyframes downloadWarn {
+    from {
+        color: red;
+        box-shadow: 0 0 10px red;
+    }
+    to {
+        color: orange;
+        box-shadow: 0 0 10px orange;
+    }
 }
 
 .panel > .panel_up {
@@ -148,11 +159,17 @@ h1, h2, h3, h4, h5, h6 {
     color: #7aabcc;
 }
 
+.panel > .progress {
+    height: 2px;
+    margin-right: 100%;
+    background-color: orange;
+}
+
 .panel > .panel_down {
     padding-left: 8px;
     padding-right: 8px;
-    height: 20px;
-    line-height: 20px;
+    height: 18px;
+    line-height: 18px;
     font-size: 12px;
     color: #7aabcc;
 }
