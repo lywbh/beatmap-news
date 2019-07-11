@@ -23,7 +23,7 @@ h1, h2, h3, h4, h5, h6 {
 .search_bar button {
     width: 56px;
     border-width: 0;
-    background: #7aabcc;
+    background-color: #7aabcc;
     cursor: pointer;
     outline: none;
     color: white;
@@ -39,10 +39,10 @@ h1, h2, h3, h4, h5, h6 {
 
 @keyframes searchWarn {
     from {
-        background: red;
+        background-color: red;
     }
     to {
-        background: #7aabcc;
+        background-color: #7aabcc;
     }
 }
 
@@ -84,11 +84,14 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 20px;
     font-weight: bold;
     color: #7aabcc;
+    background-image: url(../img/download.png);
+    background-repeat: no-repeat;
+    background-position: 0 100px;
     box-shadow: 0 0 10px orange;
     cursor: pointer;
     user-select: none;
     overflow: hidden;
-    transition: width 0.1s;
+    transition: width 0.1s, background-position 1s linear;
 }
 
 .download:hover {
@@ -173,8 +176,9 @@ h1, h2, h3, h4, h5, h6 {
 .panel > .panel_down {
     padding-left: 8px;
     padding-right: 8px;
+    padding-bottom: 2px;
     height: 18px;
-    line-height: 18px;
+    line-height: 16px;
     font-size: 12px;
     color: #7aabcc;
 }

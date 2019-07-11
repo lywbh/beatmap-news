@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "osu! beatmaps",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "osu! beatmap previewer",
   "icons": {
     "128": "src/img/icon.png"

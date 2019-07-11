@@ -116,8 +116,13 @@ function appendList(res) {
 
             function pro() {
                 chrome.downloads.search({id: downloadId}, dlItem => {
-                    if (dlItem[0].state !== "in_progress") {
+                    if (dlItem[0].state === "in_progress") {
+                        let cb = dlItem[0].bytesReceived;
+                        let tb = dlItem[0].totalBytes;
+                        button.css("background-position", "0 " + (1 - cb / tb) * button.height() + "px");
+                    } else {
                         clearInterval(progressThread);
+                        button.css("background-position", "0 " + button.height() + "px");
                         downloadingSet.delete(mapId);
                     }
                 });
@@ -161,7 +166,7 @@ function appendList(res) {
 
             function pro() {
                 if (!audio[0].ended && !audio[0].paused) {
-                    progress.css("margin-right", (1 - current / (audio[0].duration * 1000)) * 100 + "%");
+                    progress.css("margin-right", 100 - current / (audio[0].duration * 10) + "%");
                     current += 100;
                 } else {
                     clearInterval(progressThread);
