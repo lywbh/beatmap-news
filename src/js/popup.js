@@ -102,8 +102,8 @@ function appendList(res) {
                     url: baseUrl + "/beatmapsets/" + mapInfo.id + "/download"
                 }, downloadId => {
                     downloadingSet.add(mapInfo.id);
-                    bindDownload(item, mapInfo);
                     progressMonitor(downloadId, mapInfo.id);
+                    bindDownload(item, mapInfo);
                 });
             }
         });
@@ -140,11 +140,11 @@ function appendList(res) {
             audio[0].pause();
             if (button.text() === "▲") {
                 setTimeout(function () {
-                    button.text("〓");
                     audio.attr("src", "https:" + mapInfo.preview_url);
                     audio[0].play().then(() => {
-                        bindPlay(item, mapInfo);
                         progressMonitor(item);
+                        button.text("〓");
+                        bindPlay(item, mapInfo);
                     }).catch(e => {
                         console.log(e);
                         bindPlay(item, mapInfo);
@@ -158,7 +158,6 @@ function appendList(res) {
         });
 
         function progressMonitor(item) {
-            let current = 0;
             pro();
             let progressThread = setInterval(() => {
                 pro();
@@ -166,8 +165,7 @@ function appendList(res) {
 
             function pro() {
                 if (!audio[0].ended && !audio[0].paused) {
-                    progress.css("margin-right", 100 - current / (audio[0].duration * 10) + "%");
-                    current += 100;
+                    progress.css("margin-right", (1 - audio[0].currentTime / audio[0].duration) * 100 + "%");
                 } else {
                     clearInterval(progressThread);
                     item.find(".title_play").text("▲");
