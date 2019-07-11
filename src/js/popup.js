@@ -12,31 +12,31 @@ const loading = $("#listMore>.loading");
 
 initData();
 
-searchButton.bind("click", function () {
+searchButton.bind("click", () => {
     mapList.empty();
     initData(undefined, searchData.val());
     queryStore = searchData.val();
 });
 
-moreButton.bind("click", function () {
+moreButton.bind("click", () => {
     initData(cursorStore, queryStore);
 });
 
 function initData(cursor, q) {
     switchMore();
-    let param = '';
+    let param = [];
     if (q) {
-        param += '&q=' + q;
+        param.push("q=" + q);
     }
     if (cursor) {
         for (let key in cursor) {
-            param += '&cursor%5B' + key + '%5D=' + cursor[key];
+            param.push("&cursor%5B" + key + "%5D=" + cursor[key]);
         }
     }
     $.ajax({
-        url: baseUrl + "/beatmapsets/search?" + param.substring(1),
+        url: baseUrl + "/beatmapsets/search?" + param.join("&"),
         type: 'get',
-        success: function (res) {
+        success: res => {
             checkLogin(q, res.cursor);
             appendList(res);
             if (res.cursor) {
@@ -44,7 +44,7 @@ function initData(cursor, q) {
             }
             switchMore();
         },
-        error: function (e) {
+        error: e => {
             console.log(e);
         }
     });
@@ -54,7 +54,7 @@ function initData(cursor, q) {
             searchData.val("");
             searchData.attr("placeholder", "请先前往官网登录");
             searchButton.addClass("warn");
-            setTimeout(function () {
+            setTimeout(() => {
                 searchData.attr("placeholder", "请输入要检索的谱面");
                 searchButton.removeClass("warn");
             }, 2000);
@@ -75,15 +75,13 @@ function initData(cursor, q) {
 function appendList(res) {
     for (let i in res.beatmapsets) {
         let mapInfo = res.beatmapsets[i];
-        let item = $("<li></li>").append(buildItem(mapInfo));
-        mapList.append(item);
-        let imgPanel = item.find(".panel_up");
-        imgPanel.css("background-image", "url(" + mapInfo.covers.card + ")");
-        imgPanel.bind("click", function () {
+        let item = buildItem(mapInfo);
+        mapList.append($("<li></li>").append(item));
+        item.find(".panel_up").bind("click", () => {
             let mapList = mapInfo.beatmaps;
             chrome.tabs.create({url: mapList[mapList.length - 1].url});
         });
-        item.find(".mapper").bind("click", function () {
+        item.find(".mapper").bind("click", () => {
             chrome.tabs.create({url: baseUrl + "/users/" + mapInfo.user_id});
         });
         bindPlay(item, mapInfo);
@@ -92,20 +90,17 @@ function appendList(res) {
 
     function bindDownload(item, mapInfo) {
         let button = item.find(".download");
-        let progress = item.find(".progress");
-        button.one("click", function () {
+        button.one("click", () => {
             if (downloadingSet.has(mapInfo.id)) {
                 button.addClass("warn");
-                setTimeout(function () {
+                setTimeout(() => {
                     button.removeClass("warn");
                     bindDownload(item, mapInfo);
                 }, 1000);
             } else {
                 chrome.downloads.download({
-                    url: baseUrl + "/beatmapsets/" + mapInfo.id + "/download",
-                    filename: mapInfo.id + " - " + mapInfo.title + ".osz",
-                    saveAs: true
-                }, function (downloadId) {
+                    url: baseUrl + "/beatmapsets/" + mapInfo.id + "/download"
+                }, downloadId => {
                     downloadingSet.add(mapInfo.id);
                     bindDownload(item, mapInfo);
                     progressMonitor(downloadId, mapInfo.id);
@@ -114,47 +109,74 @@ function appendList(res) {
         });
 
         function progressMonitor(downloadId, mapId) {
-            let progressThread = setInterval(function() {
-                chrome.downloads.search({id: downloadId}, function(dlItem) {
-                    if (dlItem[0].state === "in_progress") {
-                        let cb = dlItem[0].bytesReceived;
-                        let tb = dlItem[0].totalBytes;
-                        progress.css("margin-right", (1 - cb / tb) * 100 + "%");
-                    } else {
+            pro();
+            let progressThread = setInterval(() => {
+                pro();
+            }, 1000);
+
+            function pro() {
+                chrome.downloads.search({id: downloadId}, dlItem => {
+                    if (dlItem[0].state !== "in_progress") {
                         clearInterval(progressThread);
-                        progress.css("margin-right", "100%");
                         downloadingSet.delete(mapId);
                     }
                 });
-            }, 1000);
+            }
         }
     }
 
     function bindPlay(item, mapInfo) {
         let button = item.find(".title_play");
-        button.bind("click", function () {
-            try {
-                audio[0].pause();
-                if ($(this).text() === "▲") {
+        let progress = item.find(".progress");
+        button.bind("click", () => {
+            return false;
+        });
+        button.one("click", () => {
+            audio[0].pause();
+            if (button.text() === "▲") {
+                setTimeout(function () {
+                    button.text("〓");
                     audio.attr("src", "https:" + mapInfo.preview_url);
-                    audio[0].play();
-                    mapList.find(".title_play").text("▲");
-                    $(this).text("〓");
-                } else if ($(this).text() === "〓") {
-                    $(this).text("▲");
-                }
-            } catch (e) {
-                console.log(e);
+                    audio[0].play().then(() => {
+                        bindPlay(item, mapInfo);
+                        progressMonitor(item);
+                    }).catch(e => {
+                        console.log(e);
+                        bindPlay(item, mapInfo);
+                    });
+                }, 100);
+            } else if (button.text() === "〓") {
+                button.text("▲");
+                bindPlay(item, mapInfo);
             }
             return false;
         });
+
+        function progressMonitor(item) {
+            let current = 0;
+            pro();
+            let progressThread = setInterval(() => {
+                pro();
+            }, 100);
+
+            function pro() {
+                if (!audio[0].ended && !audio[0].paused) {
+                    progress.css("margin-right", (1 - current / (audio[0].duration * 1000)) * 100 + "%");
+                    current += 100;
+                } else {
+                    clearInterval(progressThread);
+                    item.find(".title_play").text("▲");
+                    progress.css("margin-right", "100%");
+                }
+            }
+        }
     }
 }
 
 function buildItem(mapInfo) {
     return $('<div class="con">' +
         '        <div class="panel">' +
-        '            <div class="panel_up">' +
+        '            <div class="panel_up" style="background-image: url(' + mapInfo.covers.card + ')">' +
         '                <div class="status">' +
         '                    <span class="rank_status">' + mapInfo.status.toUpperCase() + '</span>' +
         '                    <span class="play_status">' +
