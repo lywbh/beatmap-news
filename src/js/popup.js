@@ -178,28 +178,28 @@ function appendList(res) {
 
 function buildItem(mapInfo) {
     return $('<div class="con">' +
-        '        <div class="panel">' +
-        '            <div class="panel_up" style="background-image: url(' + mapInfo.covers.card + ')">' +
-        '                <div class="status">' +
-        '                    <span class="rank_status">' + mapInfo.status.toUpperCase() + '</span>' +
-        '                    <span class="play_status">' +
-        '                    <span>' + mapInfo.play_count + ' plays</span><br>' +
-        '                    <span>' + mapInfo.favourite_count + ' loves</span>' +
-        '                </div>' +
-        '                <div class="title">' +
-        '                    <div class="title_info">' +
-        '                        <h4>' + mapInfo.title + '</h4>' +
-        '                        <h5>' + mapInfo.artist + '</h5>' +
-        '                    </div>' +
-        '                    <a class="title_play">▲</a>' +
-        '                </div>' +
-        '            </div>' +
-        '            <div class="progress"></div>' +
-        '            <div class="panel_down">' +
-        '                <span class="mapper">' + mapInfo.creator + '</span>' +
-        '                <span class="source">' + mapInfo.source + '</span>' +
-        '            </div>' +
-        '        </div>' +
-        '        <a class="download">↓</a>' +
-        '    </div>');
+                '<div class="panel">' +
+                    '<div class="panel_up" style="background-image: url(' + mapInfo.covers.card + ')">' +
+                        '<div class="status">' +
+                            '<span class="rank_status">' + mapInfo.status.toUpperCase() + '</span>' +
+                            '<span class="play_status">' +
+                            '<span>' + mapInfo.play_count + ' plays</span><br>' +
+                            '<span>' + mapInfo.favourite_count + ' loves</span>' +
+                        '</div>' +
+                        '<div class="title">' +
+                            '<div class="title_info">' +
+                                '<h4>' + mapInfo.title + '</h4>' +
+                                '<h5>' + mapInfo.artist + '</h5>' +
+                            '</div>' +
+                            '<a class="title_play">▲</a>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="progress"></div>' +
+                    '<div class="panel_down">' +
+                        '<span class="mapper">' + mapInfo.creator + '</span>' +
+                        '<span class="source">' + mapInfo.source + '</span>' +
+                    '</div>' +
+                '</div>' +
+                '<a class="download">↓</a>' +
+            '</div>');
 }
