@@ -1,4 +1,6 @@
 const baseUrl = 'https://osu.ppy.sh';
+const bloodUrl = "https://bloodcat.com/osu/s";
+
 let cursorStore;
 let queryStore;
 let downloadingSet = new Set();
@@ -99,7 +101,7 @@ function appendList(res) {
                 }, 1000);
             } else {
                 chrome.downloads.download({
-                    url: baseUrl + "/beatmapsets/" + mapInfo.id + "/download"
+                    url: bloodUrl + "/" + mapInfo.id
                 }, downloadId => {
                     downloadingSet.add(mapInfo.id);
                     progressMonitor(downloadId, mapInfo.id);
