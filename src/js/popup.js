@@ -14,11 +14,21 @@ const loading = $("#listMore>.loading");
 
 initData();
 
+searchData.bind("keypress", e => {
+    if (e.keyCode === 13) {
+        searchAction();
+    }
+});
+
 searchButton.bind("click", () => {
+    searchAction();
+});
+
+function searchAction() {
     mapList.empty();
     initData(undefined, searchData.val());
     queryStore = searchData.val();
-});
+}
 
 moreButton.bind("click", () => {
     initData(cursorStore, queryStore);
